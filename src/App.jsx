@@ -17,14 +17,18 @@ function App() {
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem("expenses");
-    if (saved) {
-      setExpenses(JSON.parse(saved));
+    const savedExpenses = localStorage.getItem("expenses");
+
+    if (savedExpenses) {
+      setExpenses(JSON.parse(savedExpenses));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses));
+    localStorage.setItem(
+      "expenses",
+      JSON.stringify(expenses)
+    );
   }, [expenses]);
 
   const addExpense = (expense) => {
@@ -34,6 +38,7 @@ function App() {
           e.id === editingExpense.id ? expense : e
         )
       );
+
       setEditingExpense(null);
     } else {
       setExpenses((prev) => [expense, ...prev]);
@@ -41,7 +46,9 @@ function App() {
   };
 
   const deleteExpense = (id) => {
-    setExpenses(expenses.filter((e) => e.id !== id));
+    setExpenses(
+      expenses.filter((expense) => expense.id !== id)
+    );
   };
 
   const filteredExpenses = expenses
@@ -56,10 +63,12 @@ function App() {
           .includes(filters.title.toLowerCase());
 
       const matchesFrom =
-        !filters.from || expense.date >= filters.from;
+        !filters.from ||
+        expense.date >= filters.from;
 
       const matchesTo =
-        !filters.to || expense.date <= filters.to;
+        !filters.to ||
+        expense.date <= filters.to;
 
       return (
         matchesCategory &&
@@ -68,79 +77,85 @@ function App() {
         matchesTo
       );
     })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+    .sort(
+      (a, b) =>
+        new Date(b.date) - new Date(a.date)
+    );
 
   const totalExpenses = filteredExpenses.reduce(
-    (sum, expense) => sum + Number(expense.amount),
+    (sum, expense) =>
+      sum + Number(expense.amount),
     0
   );
+
+  const totalCategories = [
+    ...new Set(
+      filteredExpenses.map(
+        (expense) => expense.category
+      )
+    ),
+  ].length;
 
   return (
     <div className="app-layout">
       <aside className="sidebar">
-        <h2>Expense Tracker</h2>
+        <h2>
+          Expense
+          <br />
+          Tracker
+        </h2>
 
         <div className="sidebar-menu">
-  <button className="active-menu">
-    Dashboard
-  </button>
+          <button className="active-menu">
+            Dashboard
+          </button>
 
-  <button
-    onClick={() =>
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth",
-      })
-    }
-  >
-    Add Expense
-  </button>
-
-  <button
-    onClick={() =>
-      alert("Reports feature coming soon 🚀")
-    }
-  >
-    Reports
-  </button>
-
-  <button
-    onClick={() =>
-      alert("Settings feature coming soon ⚙️")
-    }
-  >
-    Settings
-  </button>
-</div>
+          <button
+            onClick={() =>
+              window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth",
+              })
+            }
+          >
+            Add Expense
+          </button>
+        </div>
       </aside>
 
       <main className="main-content">
         <div className="topbar">
           <div>
-            <h1>Hello, Buddy 👋</h1>
-            <span>Track your daily expenses smartly</span>
+            <h1>
+              Track Your Expenses 💸
+            </h1>
+
+            <span>
+              Stay organized and manage your
+              spending efficiently
+            </span>
           </div>
         </div>
 
         <div className="stats-grid">
           <div className="stat-card">
             <h3>Total Expenses</h3>
+
             <p>₹ {totalExpenses}</p>
           </div>
 
           <div className="stat-card">
             <h3>Total Transactions</h3>
-            <p>{filteredExpenses.length}</p>
+
+            <p>
+              {filteredExpenses.length}
+            </p>
           </div>
 
           <div className="stat-card">
             <h3>Categories</h3>
-            <p>
-              {
-                [...new Set(filteredExpenses.map(e => e.category))]
-                  .length
-              }
-            </p>
+
+            <p>{totalCategories}</p>
           </div>
         </div>
 
@@ -148,7 +163,9 @@ function App() {
           <div>
             <ExpenseForm
               addExpense={addExpense}
-              editingExpense={editingExpense}
+              editingExpense={
+                editingExpense
+              }
             />
           </div>
 
@@ -158,12 +175,16 @@ function App() {
               setFilters={setFilters}
             />
 
-            <Summary expenses={filteredExpenses} />
+            <Summary
+              expenses={filteredExpenses}
+            />
 
             <ExpenseList
               expenses={filteredExpenses}
               deleteExpense={deleteExpense}
-              setEditingExpense={setEditingExpense}
+              setEditingExpense={
+                setEditingExpense
+              }
             />
           </div>
         </div>
@@ -173,3 +194,4 @@ function App() {
 }
 
 export default App;
+
