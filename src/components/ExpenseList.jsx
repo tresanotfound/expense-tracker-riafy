@@ -13,13 +13,13 @@ function ExpenseList({
         <div className="card" key={expense.id}>
           <h3>{expense.title}</h3>
 
-          <p>₹ {expense.amount}</p>
+          <p><strong>Amount:</strong> ₹ {expense.amount}</p>
 
-          <p>{expense.category}</p>
+          <p><strong>Category:</strong> {expense.category}</p>
 
-          <p>{expense.date}</p>
+          <p><strong>Date:</strong> {expense.date}</p>
 
-          <p>{expense.note}</p>
+          <p><strong>Note:</strong> {expense.note}</p>
 
           <button
             onClick={() => setEditingExpense(expense)}
